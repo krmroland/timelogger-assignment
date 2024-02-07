@@ -1,0 +1,86 @@
+on: push
+name: app-ci
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 1
+
+      - name: Install composer dependencies
+        run: |
+          composer install --no-scripts
+
+      - name: Prepare Laravel Application
+        run: |
+          cp .env.ci .env
+          touch database/database.sqlite
+
+      - name: Run Testsuite
+        run: php artisan test --parallel
+  deploy:
+    runs-on: ubuntu-latest
+    needs: tests
+    if: success() && (github.ref == 'refs/heads/mainline' || contains(github.event.head_commit.message, '--deploy'))
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.2"
+
+      - name: Node version
+        uses: actions/setup-node@v3
+        with:
+          node-version: "19"
+
+      - name: Install prod Dependencies
+        run: |
+          composer install --no-dev  --prefer-dist --no-interaction
+
+      - name: build ui
+        run: |
+          npm ci
+          npm run build
+
+      - name: clean up
+        run: |
+          rm -rdf node_modules tests ui
+
+      - name: copy file via ssh
+        uses: appleboy/scp-action@v0.1.4
+        with:
+          host: ${{ secrets.DIGITAL_OCEAN_HOST }}
+          username: root
+          key: ${{ secrets.DIGITAL_OCEAN_SSH_KEY }}
+          source: "."
+          target: /timelogger
+
+      - name: Finalize deployment
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.DIGITAL_OCEAN_HOST }}
+          username: root
+          key: ${{ secrets.DIGITAL_OCEAN_SSH_KEY }}
+          script_stop: true
+          script: |
+            php --version
+            cd /timelogger
+            cp infrastructure/default.nginx.conf /etc/nginx/sites-enabled/default.conf
+            cp infrastructure/supervisord.conf  /etc/supervisor/conf.d/timelogger.conf
+            cp infrastructure/php.ini /etc/php.ini
+            cp .env.example .env
+
+            if [ ! -f /timelogger/database/database.sqlite ]; then
+              touch /timelogger/database/database.sqlite
+            fi
+            php artisan migrate --force
+            supervisorctl reload
+            nginx -s reload
