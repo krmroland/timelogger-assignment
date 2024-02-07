@@ -31,6 +31,7 @@
             <v-divider></v-divider>
             <v-btn
               block
+              type="button"
               color="primary"
               variant="elevated"
               @click="handleSubmit"
@@ -55,8 +56,9 @@ const form = useForm({
 
 function handleSubmit() {
   form.post(`/auth/register`).then(() => {
-    notify.success("User was created successfully");
-    window.location.reload();
+    notify.success("User was created successfully").then(() => {
+      window.location.reload();
+    });
   });
 }
 </script>

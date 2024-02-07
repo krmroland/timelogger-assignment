@@ -1,0 +1,43 @@
+on:
+  workflow_dispatch:
+  workflow_call:
+  push:
+    branches:
+      - mainline
+    paths:
+      - ".github/workflows/provision.yml"
+name: provision-server
+jobs:
+  provision-server:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Provision droplet
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.DIGITAL_OCEAN_HOST }}
+          username: root
+          key: ${{secrets.DIGITAL_OCEAN_SSH_KEY}}
+          script_stop: false
+          script: |
+            export  DEBIAN_FRONTEND=noninteractive
+            ln -snf /usr/share/zoneinfo/UTC /etc/localtime && echo UTC > /etc/timezone
+            snap install core && snap refresh core
+            apt-get update 
+            apt-get remove apache2 certbot
+            apt-get install -y gnupg gosu curl ca-certificates zip unzip git python3 supervisor sqlite3 libcap2-bin libpng-dev dnsutils librsvg2-bin nginx
+            curl -sS 'https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x14aa40ec0831756756d7f66c4f4ea0aae5267a6c' | gpg --dearmor | tee /etc/apt/keyrings/ppa_ondrej_php.gpg > /dev/null
+            echo "deb [signed-by=/etc/apt/keyrings/ppa_ondrej_php.gpg] https://ppa.launchpadcontent.net/ondrej/php/ubuntu jammy main" > /etc/apt/sources.list.d/ppa_ondrej_php.list 
+            apt-get update -y
+            apt-get -y install php8.2-cli php8.2 
+            apt-get install -y php8.2-{cli,dev,sqlite3,gd,curl,mbstring,xml,zip,bcmath,readline,msgpack,igbinary,opcache,imagick} 
+            setcap "cap_net_bind_service=+ep" /usr/bin/php8.2
+            snap install --classic certbot
+            ln -s /snap/bin/certbot /usr/bin/certbot
+            apt-get -y autoremove
+            apt-get clean 
+
+            rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+            sudo ufw allow 'Nginx HTTP'
+            systemctl restart  nginx
+            systemctl restart  supervisor
