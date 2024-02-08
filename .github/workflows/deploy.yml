@@ -78,6 +78,10 @@ jobs:
             cp infrastructure/php.ini /etc/php.ini
             cp .env.example .env
 
+            if [ ! -f /crm/rr ]; then
+              ./vendor/bin/rr get-binary -n 
+            fi
+
             if [ ! -f /timelogger/database/database.sqlite ]; then
               touch /timelogger/database/database.sqlite
             fi

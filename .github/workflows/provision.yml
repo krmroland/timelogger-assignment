@@ -39,5 +39,7 @@ jobs:
 
             rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
             sudo ufw allow 'Nginx HTTP'
+            systemctl enable supervisor
+            systemctl enable nginx
             systemctl restart  nginx
             systemctl restart  supervisor
