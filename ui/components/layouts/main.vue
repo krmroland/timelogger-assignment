@@ -62,7 +62,7 @@ import store from "@/store";
 
 defineProps({ noContainer: Boolean, title: String });
 
-const user = computed(() => store.user);
+const user = computed(() => store.auth.user || {});
 
 const isLoggingOut = ref(false);
 

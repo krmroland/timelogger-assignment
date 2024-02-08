@@ -18,9 +18,6 @@
       @auth
         window.Auth = @json(auth()->user()->info())
 
-        window.App= @json([
-        ])
-
       @endauth
     </script>
 
