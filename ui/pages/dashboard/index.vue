@@ -1,5 +1,8 @@
 <template>
-  <v-app>
-    <h1>Application</h1>
-  </v-app>
+  <main-layout>
+    <v-container> </v-container>
+  </main-layout>
 </template>
+<script setup>
+import MainLayout from "@/components/layouts/main";
+</script>
