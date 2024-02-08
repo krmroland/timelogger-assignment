@@ -78,7 +78,7 @@ jobs:
             cp infrastructure/php.ini /etc/php.ini
             cp .env.prod .env
 
-            if [ ! -f /crm/rr ]; then
+            if [ ! -f /timelogger/rr ]; then
               ./vendor/bin/rr get-binary -n 
             fi
 
