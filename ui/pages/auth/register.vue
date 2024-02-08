@@ -56,9 +56,8 @@ const form = useForm({
 
 function handleSubmit() {
   form.post(`/auth/register`).then(() => {
-    notify.success("User was created successfully").then(() => {
-      window.location.reload();
-    });
+    window.location.reload();
+    notify.success("User was created successfully");
   });
 }
 </script>

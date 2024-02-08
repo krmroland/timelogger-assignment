@@ -51,7 +51,6 @@ export default function useForm(data = {}) {
 
     wrapResponse(response) {
       return response
-        .then((response) => Promise.resolve([response, null]))
         .catch((e) => {
           const response = e.response || {};
 
@@ -65,7 +64,7 @@ export default function useForm(data = {}) {
             notify.error(message);
           }
 
-          return Promise.resolve([null, e]);
+          return Promise.reject(e);
         })
         .finally(() => {
           this.processing = false;
