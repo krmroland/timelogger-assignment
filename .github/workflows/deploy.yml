@@ -76,7 +76,7 @@ jobs:
             cp infrastructure/default.nginx.conf /etc/nginx/sites-enabled/default.conf
             cp infrastructure/supervisord.conf  /etc/supervisor/conf.d/timelogger.conf
             cp infrastructure/php.ini /etc/php.ini
-            cp .env.example .env
+            cp .env.prod .env
 
             if [ ! -f /crm/rr ]; then
               ./vendor/bin/rr get-binary -n 
