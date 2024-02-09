@@ -13,8 +13,9 @@ return new class extends Migration {
         Schema::create("time_entries", function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger("user_id");
+            $table->date("date")->nullable();
             $table->text("description")->nullable();
-            $table->string("category")->nullable();
+            $table->json("categories")->nullable();
             $table->unsignedInteger("time_in_minutes")->nullable();
             $table->timestamps();
         });

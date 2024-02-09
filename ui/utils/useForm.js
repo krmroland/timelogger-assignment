@@ -16,12 +16,14 @@ export default function useForm(data = {}) {
         return;
       }
 
-      Object.keys(data).forEach((key) => {
+      Object.keys(value).forEach((key) => {
         this[key] = value[key];
       });
     },
     reset() {
-      return this;
+      Object.keys(data).forEach((key) => {
+        this[key] = data[key];
+      });
     },
     setErrors(errors) {
       this.errors = Object.entries(errors || {}).reduce(
@@ -51,6 +53,7 @@ export default function useForm(data = {}) {
 
     wrapResponse(response) {
       return response
+        .then((response) => Promise.resolve(response))
         .catch((e) => {
           const response = e.response || {};
 

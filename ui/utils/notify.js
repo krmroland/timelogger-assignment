@@ -1,8 +1,8 @@
-import { reactive } from 'vue';
+import { reactive } from "vue";
 
 export default reactive({
-  type: 'info',
-  text: '',
+  type: "info",
+  text: "",
   props: {},
   confirmation: {},
   timeoutId: null,
@@ -25,20 +25,23 @@ export default reactive({
     }, 90000);
   },
   success(...args) {
-    this.show('success', ...args);
+    this.show("success", ...args);
   },
   error(error, ...args) {
-    const message = error instanceof Error ? error.response?.data?.message || error.message : error;
+    const message =
+      error instanceof Error
+        ? error.response?.data?.message || error.message
+        : error;
 
-    this.show('error', message, ...args);
+    this.show("error", message, ...args);
   },
 
   warning(...args) {
-    this.show('error', ...args);
+    this.show("error", ...args);
   },
 
   info(...args) {
-    this.show('info', ...args);
+    this.show("info", ...args);
   },
 
   handleConfirm(value) {

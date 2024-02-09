@@ -50,6 +50,7 @@
     </v-app-bar>
 
     <v-main class="tw-bg-zinc-100 tw-pb-8">
+      <app-notifications></app-notifications>
       <slot />
     </v-main>
   </v-app>
@@ -58,7 +59,8 @@
 <script setup>
 import { computed, ref } from "vue";
 import { mdiBellOutline, mdiChevronDown, mdiClipboardTextClock } from "@mdi/js";
-import store from "@/store";
+import store from "@/utils/store";
+import AppNotifications from "./notifications";
 
 defineProps({ noContainer: Boolean, title: String });
 
