@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class TimeEntry extends Model
 {
     use HasFactory;
+
+    protected $casts = [
+        "date" => "date",
+        "categories" => "array",
+    ];
 }
