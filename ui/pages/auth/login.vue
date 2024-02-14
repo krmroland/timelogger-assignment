@@ -22,14 +22,6 @@
             </v-text-field>
 
             <v-btn
-              variant="outlined"
-              block
-              :to="{ name: 'auth.register' }"
-              class="tw-mb-2"
-            >
-              Register Instead
-            </v-btn>
-            <v-btn
               block
               type="button"
               color="primary"
@@ -38,6 +30,15 @@
             >
               Login
             </v-btn>
+            <div class="tw-mt-3 tw-text-center">
+              <span>Don't have an account yet? </span>
+              <router-link
+                :to="{ name: 'auth.register' }"
+                class="tw-mb-2 tw-text-sm tw-text-info"
+              >
+                Sign up Instead
+              </router-link>
+            </div>
           </v-card-text>
         </v-card>
       </v-col>

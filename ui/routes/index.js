@@ -12,5 +12,6 @@ export default [
   {
     path: "/auth/login",
     component: () => import("@/pages/auth/login"),
+    name: "auth.login",
   },
 ];

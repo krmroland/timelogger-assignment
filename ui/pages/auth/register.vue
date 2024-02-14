@@ -26,8 +26,7 @@
               :error-messages="form.errors.password"
             >
             </v-text-field>
-          </v-card-text>
-          <v-card-actions class="tw-bg-zinc-100 tw-py-3">
+
             <v-divider></v-divider>
             <v-btn
               block
@@ -38,7 +37,16 @@
             >
               Register
             </v-btn>
-          </v-card-actions>
+            <div class="tw-mt-3 tw-text-center">
+              <span>Already have an account? </span>
+              <router-link
+                :to="{ name: 'auth.login' }"
+                class="tw-mb-2 tw-text-sm tw-text-info"
+              >
+                Login Instead
+              </router-link>
+            </div>
+          </v-card-text>
         </v-card>
       </v-col>
     </v-row>
