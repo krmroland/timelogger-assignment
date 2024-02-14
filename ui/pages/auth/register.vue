@@ -4,7 +4,7 @@
       <v-col md="4">
         <v-card>
           <v-card-title class="tw-text-center tw-py-10">
-            <h2>Time Logger Registration</h2>
+            <h4>Time Logger Registration</h4>
           </v-card-title>
           <v-card-text>
             <v-text-field

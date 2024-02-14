@@ -2,51 +2,92 @@
   <main-layout>
     <log-entry-modal v-model="isCreating" @created="handleCreated" />
     <v-container>
-      <header class="tw-flex tw-items-center">
-        <h1 class="tw-font-bold tw-text-lg">Time Entries</h1>
+      <h3>Time Entries</h3>
+      <header class="tw-flex tw-items-center tw-mt-5">
+        <v-responsive max-width="160px">
+          <v-autocomplete
+            :prepend-inner-icon="mdiCalendarFilterOutline"
+            :items="[
+              { value: 'daily', title: 'Daily' },
+              { value: 'monthly', title: 'Monthly' },
+            ]"
+            v-model="mode"
+          ></v-autocomplete>
+        </v-responsive>
         <v-spacer></v-spacer>
-        <v-btn color="primary" @click="isCreating = true">Log Time</v-btn>
-      </header>
 
-      <pre>
-          <code>{{ entries }}</code>
-      </pre>
+        <v-menu transition="slide-y-transition">
+          <template v-slot:activator="{ props }">
+            <v-responsive class="tw-ml-3" max-width="240px">
+              <v-text-field
+                v-bind="props"
+                :value="formattedDate"
+                hide-details
+                placeholder="Filter date"
+                :prepend-inner-icon="mdiCalendarBlankOutline"
+                :append-inner-icon="mdiFilterVariant"
+              ></v-text-field>
+            </v-responsive>
+          </template>
+          <v-date-picker
+            v-model="date"
+            elevation="24"
+            title="Filter Entries"
+          ></v-date-picker>
+        </v-menu>
+
+        <v-spacer></v-spacer>
+        <v-btn variant="outlined">
+          <template #prepend>
+            <v-icon>{{ mdiExport }}</v-icon>
+          </template>
+          Export
+        </v-btn>
+
+        <v-btn color="primary" @click="isCreating = true" class="tw-ml-2">
+          <template #prepend>
+            <v-icon>{{ mdiTimerPlusOutline }}</v-icon>
+          </template>
+
+          Add Entry
+        </v-btn>
+      </header>
+      <entries-table></entries-table>
     </v-container>
   </main-layout>
 </template>
 <script setup>
 import MainLayout from "@/components/layouts/main";
-import { ref, onMounted } from "vue";
-import LogEntryModal from "@/components/times/log-entry-modal";
-import http from "@/utils/http";
-import notify from "@/utils/notify";
-import store from "@/utils/store";
+import { ref, computed } from "vue";
+import LogEntryModal from "@/components/time/log-entry-modal";
+import EntriesTable from "@/components/time/entries-table";
+
+import { capitalize } from "lodash-es";
+import {
+  mdiTimerPlusOutline,
+  mdiCalendarBlankOutline,
+  mdiCalendarFilterOutline,
+  mdiFilterVariant,
+  mdiExport,
+} from "@mdi/js";
+
+import dayjs from "dayjs";
 
 const isCreating = ref(false);
 
-const entries = ref({});
-const isLoading = ref(false);
+const date = ref(new Date());
 
-function fetchEntries() {
-  isLoading.value = true;
+const entries = ref(null);
 
-  http
-    .get(`/api/v1/users/${store.userId}/time-entries`)
-    .then(({ data }) => {
-      entries.value = data;
-    })
-    .catch(() => {
-      notify.error("Something went wrong while fetching user entries");
-    })
-    .finally(() => {
-      isLoading.value = false;
-    });
-}
+const mode = ref("daily");
 
-onMounted(fetchEntries);
-
+const formattedDate = computed(() => {
+  const d = dayjs(date.value || "");
+  console.log(mode.value);
+  return d.format(mode.value === "monthly" ? "MMM-YYYY" : "DD-MMM-YYYY");
+});
 function handleCreated(entry) {
   isCreating.value = false;
-  fetchEntries();
+  entries.current.fetchEntries();
 }
 </script>
