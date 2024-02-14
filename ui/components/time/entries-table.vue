@@ -1,6 +1,20 @@
 <template>
     <v-card>
-        <v-data-table> </v-data-table>
+        <v-data-table :headers="headers" :items="entries?.data || []">
+            <template #item.categories="{ item }">
+                <div>
+                    <v-chip
+                        v-for="chip in item.categories"
+                        label
+                        class="tw-ml-1"
+                        density="compact"
+                        variant="outlined"
+                    >
+                        {{ chip }}
+                    </v-chip>
+                </div>
+            </template>
+        </v-data-table>
     </v-card>
 </template>
 
@@ -9,6 +23,13 @@ import { ref, onMounted } from "vue";
 import store from "@/utils/store";
 import http from "@/utils/http";
 import notify from "@/utils/notify";
+
+const headers = [
+    { title: "Date", value: "date" },
+    { title: "Categories", value: "categories" },
+    { title: "Description", value: "description" },
+    { title: "Time", value: "time.formatted" },
+];
 
 const isLoading = ref(false);
 
@@ -30,4 +51,6 @@ function fetchEntries() {
 }
 
 onMounted(fetchEntries);
+
+defineExpose({ fetchEntries });
 </script>

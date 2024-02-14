@@ -52,13 +52,13 @@
           Add Entry
         </v-btn>
       </header>
-      <entries-table></entries-table>
+      <entries-table ref="tableRef"></entries-table>
     </v-container>
   </main-layout>
 </template>
 <script setup>
 import MainLayout from "@/components/layouts/main";
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
 import LogEntryModal from "@/components/time/log-entry-modal";
 import EntriesTable from "@/components/time/entries-table";
 
@@ -77,7 +77,7 @@ const isCreating = ref(false);
 
 const date = ref(new Date());
 
-const entries = ref(null);
+const tableRef = ref(null);
 
 const mode = ref("daily");
 
@@ -86,8 +86,9 @@ const formattedDate = computed(() => {
   console.log(mode.value);
   return d.format(mode.value === "monthly" ? "MMM-YYYY" : "DD-MMM-YYYY");
 });
+
 function handleCreated(entry) {
   isCreating.value = false;
-  entries.current.fetchEntries();
+  tableRef.value.fetchEntries();
 }
 </script>

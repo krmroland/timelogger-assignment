@@ -21,11 +21,11 @@ class UserTimeEntriesController extends Controller
     public function store(Request $request, User $user)
     {
         $data = $request->validate([
-            "date" => "required|date",
-            "time_in_minutes" => "integer|min:1|max:1440",
-            "description" => "string|required|max:150",
-            "categories" => "array|required",
-            "categories.*" => "string",
+            'date' => 'required|date',
+            'time_in_minutes' => 'integer|min:1|max:1440',
+            'description' => 'string|required|max:150',
+            'categories' => 'array|required',
+            'categories.*' => 'string',
         ]);
 
         $entry = $user->timeEntries()->create($data);
