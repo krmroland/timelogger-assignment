@@ -7,9 +7,7 @@
         </v-icon>
       </template>
 
-      <v-app-bar-title class="tw-text-xl tw-font-bold tw-flex-none">
-        Time logger
-      </v-app-bar-title>
+      <v-app-bar-title class="tw-text-xl tw-font-bold tw-flex-none"> Time logger </v-app-bar-title>
 
       <v-spacer> </v-spacer>
 
@@ -19,13 +17,7 @@
 
       <v-menu>
         <template #activator="{ props }">
-          <v-btn
-            v-bind="props"
-            size="large"
-            class="tw-mx-5"
-            variant="text"
-            rounded
-          >
+          <v-btn v-bind="props" size="large" class="tw-mx-5" variant="text" rounded>
             <template #prepend>
               <v-avatar size="30">
                 <v-img
@@ -57,28 +49,28 @@
 </template>
 
 <script setup>
-import { computed, ref } from "vue";
-import { mdiBellOutline, mdiChevronDown, mdiClipboardTextClock } from "@mdi/js";
-import store from "@/utils/store";
-import AppNotifications from "./notifications";
+  import { computed, ref } from 'vue';
+  import { mdiBellOutline, mdiChevronDown, mdiClipboardTextClock } from '@mdi/js';
+  import store from '@/utils/store';
+  import AppNotifications from './notifications';
 
-defineProps({ noContainer: Boolean, title: String });
+  defineProps({ noContainer: Boolean, title: String });
 
-const user = computed(() => store.auth.user || {});
+  const user = computed(() => store.auth.user || {});
 
-const isLoggingOut = ref(false);
+  const isLoggingOut = ref(false);
 
-async function handleLogout() {
-  isLoggingOut.value = true;
-  const { default: http } = await import("@/utils/http");
+  async function handleLogout() {
+    isLoggingOut.value = true;
+    const { default: http } = await import('@/utils/http');
 
-  http
-    .post("/auth/logout")
-    .then(() => {
-      window.location.reload();
-    })
-    .finally(() => {
-      isLoggingOut.value = false;
-    });
-}
+    http
+      .post('/auth/logout')
+      .then(() => {
+        window.location.reload();
+      })
+      .finally(() => {
+        isLoggingOut.value = false;
+      });
+  }
 </script>

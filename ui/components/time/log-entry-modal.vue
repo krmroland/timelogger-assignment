@@ -2,9 +2,7 @@
   <v-dialog v-bind="$attrs" persistent max-width="500">
     <v-card>
       <v-toolbar flat tile>
-        <v-toolbar-title class="tw-text-xl tw-font-medium">
-          Log Entry
-        </v-toolbar-title>
+        <v-toolbar-title class="tw-text-xl tw-font-medium"> Log Entry </v-toolbar-title>
         <v-spacer></v-spacer>
 
         <v-btn icon @click="$emit('update:modelValue', false)">
@@ -78,32 +76,32 @@
 </template>
 
 <script setup>
-import { mdiBookClockOutline, mdiClose, mdiLabelOutline } from "@mdi/js";
+  import { mdiBookClockOutline, mdiClose, mdiLabelOutline } from '@mdi/js';
 
-import useForm from "@/utils/useForm";
+  import useForm from '@/utils/useForm';
 
-import notify from "@/utils/notify";
-import store from "@/utils/store";
+  import notify from '@/utils/notify';
+  import store from '@/utils/store';
 
-const emit = defineEmits(["created", "update:modelValue"]);
+  const emit = defineEmits(['created', 'update:modelValue']);
 
-const form = useForm({
-  date: null,
-  time_in_minutes: 0,
-  categories: [],
-  description: "",
-});
+  const form = useForm({
+    date: null,
+    time_in_minutes: 0,
+    categories: [],
+    description: '',
+  });
 
-async function handleSubmit() {
-  form
-    .post(`/api/v1/users/${store.userId}/time-entries`)
-    .then(({ data: entry }) => {
-      form.reset();
-      emit("created", entry);
-      notify.success("Entry was created successfully");
-    })
-    .catch((e) => {
-      notify.error("Something went wrong while logging time");
-    });
-}
+  async function handleSubmit() {
+    form
+      .post(`/api/v1/users/${store.userId}/time-entries`)
+      .then(({ data: entry }) => {
+        form.reset();
+        emit('created', entry);
+        notify.success('Entry was created successfully');
+      })
+      .catch((e) => {
+        notify.error('Something went wrong while logging time');
+      });
+  }
 </script>

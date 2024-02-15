@@ -36,6 +36,8 @@ jobs:
             snap install --classic certbot
             ln -s /snap/bin/certbot /usr/bin/certbot
             apt-get -y autoremove
+
+
             apt-get clean 
 
             rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
