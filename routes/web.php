@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ExportUserTimeEntriesController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,12 +14,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
 
-Route::get('/auth/{view?}', fn () => view('app'))
+Route::middleware(['auth'])->get('users/{user}/export-time-entries', ExportUserTimeEntriesController::class);
+
+Route::get('/auth/{view?}', fn() => view('app'))
     ->where('view', '^(?!(api)).*$')
     ->middleware('guest');
 
-Route::get('{view?}', fn () => view('app'))
+Route::get('{view?}', fn() => view('app'))
     ->where('view', '^(?!(api)).*$')
     ->middleware('auth');

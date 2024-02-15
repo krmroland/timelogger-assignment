@@ -30,15 +30,16 @@ class Time implements Arrayable
         return $this->interval->total('hours');
     }
 
+    public function formated()
+    {
+        return sprintf('%sh:%sm', (int) $this->hours(), str_pad($this->interval->minutes, 2, '0'));
+    }
+
     public function toArray()
     {
         return [
             'seconds' => $this->seconds(),
-            'formatted' => sprintf(
-                '%sh:%sm',
-                (int) $this->hours(),
-                str_pad($this->interval->minutes, 2, '0')
-            ),
+            'formatted' => $this->formated(),
         ];
     }
 }

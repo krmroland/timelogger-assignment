@@ -20,6 +20,22 @@ class TimeEntry extends Model
 
     public function time(): Attribute
     {
-        return Attribute::get(fn () => Time::new($this->time_in_minutes));
+        return Attribute::get(fn() => Time::new($this->time_in_minutes));
+    }
+
+    public static function csvHeaders(): array
+    {
+        return ['Date', 'Categories', 'Description', 'Time In Seconds', 'Time'];
+    }
+
+    public function toCsvEntry()
+    {
+        return [
+            $this->date->format('Y-m-d'),
+            implode(',', $this->categories),
+            $this->description,
+            $this->time->seconds(),
+            $this->time->formated(),
+        ];
     }
 }

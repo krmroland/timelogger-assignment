@@ -23,6 +23,7 @@
                 v-bind="props"
                 :value="formattedDate"
                 clearable
+                @click:clear="date = null"
                 hide-details
                 placeholder="Filter date"
                 :prepend-inner-icon="mdiCalendarBlankOutline"
@@ -35,13 +36,7 @@
         </v-menu>
 
         <v-spacer></v-spacer>
-        <v-btn variant="outlined">
-          <template #prepend>
-            <v-icon>{{ mdiExport }}</v-icon>
-          </template>
-          Export
-        </v-btn>
-
+        <export-button :user-id="store.userId" />
         <v-btn color="primary" @click="isCreating = true" class="tw-ml-2">
           <template #prepend>
             <v-icon>{{ mdiTimerPlusOutline }}</v-icon>
@@ -59,6 +54,8 @@
   import { ref, computed, onMounted } from 'vue';
   import LogEntryModal from '@/components/time/log-entry-modal';
   import EntriesTable from '@/components/time/entries-table';
+  import ExportButton from '@/components/time/export-button';
+  import store from '@/utils/store';
 
   import { capitalize } from 'lodash-es';
   import {
@@ -66,14 +63,13 @@
     mdiCalendarBlankOutline,
     mdiCalendarFilterOutline,
     mdiFilterVariant,
-    mdiExport,
   } from '@mdi/js';
 
   import dayjs from 'dayjs';
 
   const isCreating = ref(false);
 
-  const date = ref();
+  const date = ref(new Date());
 
   const tableRef = ref(null);
 
