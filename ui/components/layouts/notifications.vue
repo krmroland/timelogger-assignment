@@ -20,25 +20,18 @@
     @update:model-value="notify.handleConfirm($event)"
   >
     <v-card rounded="0">
-      <v-card-title>{{
-        notify.confirmation.options?.title || "Are you sure?"
-      }}</v-card-title>
+      <v-card-title>{{ notify.confirmation.options?.title || 'Are you sure?' }}</v-card-title>
       <v-card-text>{{ notify.confirmation.message }}</v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn
-          color="primary-darken-1"
-          variant="text"
-          @click="notify.handleConfirm(true)"
+        <v-btn color="primary-darken-1" variant="text" @click="notify.handleConfirm(true)"
           >Yes</v-btn
         >
-        <v-btn color="grey" variant="text" @click="notify.handleConfirm(false)"
-          >Cancel</v-btn
-        >
+        <v-btn color="grey" variant="text" @click="notify.handleConfirm(false)">Cancel</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
 </template>
 <script setup>
-import notify from "@/utils/notify";
+  import notify from '@/utils/notify';
 </script>

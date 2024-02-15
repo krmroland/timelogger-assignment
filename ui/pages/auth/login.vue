@@ -7,11 +7,7 @@
             <h4>Time Logger Login</h4>
           </v-card-title>
           <v-card-text>
-            <v-text-field
-              label="Email"
-              v-model="form.email"
-              :error-messages="form.errors.email"
-            >
+            <v-text-field label="Email" v-model="form.email" :error-messages="form.errors.email">
             </v-text-field>
             <v-text-field
               label="Password"
@@ -21,21 +17,12 @@
             >
             </v-text-field>
 
-            <v-btn
-              block
-              type="button"
-              color="primary"
-              variant="elevated"
-              @click="handleSubmit"
-            >
+            <v-btn block type="button" color="primary" variant="elevated" @click="handleSubmit">
               Login
             </v-btn>
             <div class="tw-mt-3 tw-text-center">
               <span>Don't have an account yet? </span>
-              <router-link
-                :to="{ name: 'auth.register' }"
-                class="tw-mb-2 tw-text-sm tw-text-info"
-              >
+              <router-link :to="{ name: 'auth.register' }" class="tw-mb-2 tw-text-sm tw-text-info">
                 Sign up Instead
               </router-link>
             </div>
@@ -46,19 +33,19 @@
   </v-app>
 </template>
 <script setup>
-import useForm from "@/utils/useForm";
-import notify from "@/utils/notify";
+  import useForm from '@/utils/useForm';
+  import notify from '@/utils/notify';
 
-const form = useForm({
-  name: "",
-  email: "",
-  password: "",
-});
-
-function handleSubmit() {
-  form.post(`/auth/login`).then(() => {
-    window.location.reload();
-    notify.success("User was logged in successfully");
+  const form = useForm({
+    name: '',
+    email: '',
+    password: '',
   });
-}
+
+  function handleSubmit() {
+    form.post(`/auth/login`).then(() => {
+      window.location.reload();
+      notify.success('User was logged in successfully');
+    });
+  }
 </script>

@@ -7,17 +7,9 @@
             <h4>Time Logger Registration</h4>
           </v-card-title>
           <v-card-text>
-            <v-text-field
-              label="Name"
-              v-model="form.name"
-              :error-messages="form.errors.name"
-            >
+            <v-text-field label="Name" v-model="form.name" :error-messages="form.errors.name">
             </v-text-field>
-            <v-text-field
-              label="Email"
-              v-model="form.email"
-              :error-messages="form.errors.email"
-            >
+            <v-text-field label="Email" v-model="form.email" :error-messages="form.errors.email">
             </v-text-field>
             <v-text-field
               label="Password"
@@ -28,21 +20,12 @@
             </v-text-field>
 
             <v-divider></v-divider>
-            <v-btn
-              block
-              type="button"
-              color="primary"
-              variant="elevated"
-              @click="handleSubmit"
-            >
+            <v-btn block type="button" color="primary" variant="elevated" @click="handleSubmit">
               Register
             </v-btn>
             <div class="tw-mt-3 tw-text-center">
               <span>Already have an account? </span>
-              <router-link
-                :to="{ name: 'auth.login' }"
-                class="tw-mb-2 tw-text-sm tw-text-info"
-              >
+              <router-link :to="{ name: 'auth.login' }" class="tw-mb-2 tw-text-sm tw-text-info">
                 Login Instead
               </router-link>
             </div>
@@ -53,19 +36,19 @@
   </v-app>
 </template>
 <script setup>
-import useForm from "@/utils/useForm";
-import notify from "@/utils/notify";
+  import useForm from '@/utils/useForm';
+  import notify from '@/utils/notify';
 
-const form = useForm({
-  name: "",
-  email: "",
-  password: "",
-});
-
-function handleSubmit() {
-  form.post(`/auth/register`).then(() => {
-    window.location.reload();
-    notify.success("User was created successfully");
+  const form = useForm({
+    name: '',
+    email: '',
+    password: '',
   });
-}
+
+  function handleSubmit() {
+    form.post(`/auth/register`).then(() => {
+      window.location.reload();
+      notify.success('User was created successfully');
+    });
+  }
 </script>

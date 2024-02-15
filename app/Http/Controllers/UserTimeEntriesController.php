@@ -10,9 +10,24 @@ class UserTimeEntriesController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(User $user)
+    public function index(User $user, Request $request)
     {
-        return $user->timeEntries()->paginate();
+        $query = $user->timeEntries();
+
+        $request->validate(['date' => 'date']);
+
+        $date = $request->date ? $request->date('date') : null;
+
+        if ($request->mode === 'monthly') {
+            return $query
+                ->when($date, fn ($q) => $q->whereMonth('date', $date)->whereYear('date', $date))
+                ->selectRaw("strftime('%Y-%m', date) AS month")
+                ->selectRaw('sum(time_in_minutes) as time_in_minutes')
+                ->groupBy('month')
+                ->paginate();
+        }
+
+        return $query->when($date, fn ($q) => $q->whereDate('date', $date))->paginate();
     }
 
     /**
