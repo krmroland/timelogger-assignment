@@ -69,7 +69,7 @@
 
   const isCreating = ref(false);
 
-  const date = ref(new Date());
+  const date = ref(null);
 
   const tableRef = ref(null);
 
